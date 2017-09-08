@@ -1,4 +1,14 @@
 <?php
+    if(!$_SERVER['HTTP_USER_AGENT']) {
+        header("Content-type: text/html; charset=utf-8");
+        die('UA Error');
+    }
+    if(!isset($_SERVER['HTTP_REFERER']) || !strstr($_SERVER['HTTP_REFERER'], '')){
+    // You can set whitelist domain here.
+        header("Content-type: text/html; charset=utf-8");
+        die('Referrer Error');
+    }
+
     $tid='';  //Your Google Analytics tid here,like UA-XXXX-Y
     
     function create_uuid(){
