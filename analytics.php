@@ -1,15 +1,26 @@
 <?php
-    if(!$_SERVER['HTTP_USER_AGENT']) {
-        header("Content-type: text/html; charset=utf-8");
-        die('UA Error');
-    }
-    if(!isset($_SERVER['HTTP_REFERER']) || !strstr($_SERVER['HTTP_REFERER'], '')){
-    // You can set whitelist domain here.
-        header("Content-type: text/html; charset=utf-8");
-        die('Referrer Error');
-    }
-
     $tid='';  //Your Google Analytics tid here,like UA-XXXX-Y
+    $check_referer_domain=false;
+    $domain='example.com';  //If you open the domain check set your domain here
+    
+    if (!isset($_SERVER['HTTP_REFERER']) || !isset($_SERVER['HTTP_USER_AGENT'])){
+        echo 'error';
+        die();
+    }
+    $referer=$_SERVER['HTTP_REFERER'];
+    if (!empty($referer)){
+        if ($check_referer_domain){
+            $info = parse_url($referer);
+            $local = isset($info['host']) ? $info['host'] : '';
+            if ($local!=$domain){
+                echo 'error';
+                die();
+            }
+        }
+    }else{
+        echo 'error';
+        die();
+    }
     
     function create_uuid(){
         $str = md5(uniqid(mt_rand(), true));
@@ -20,14 +31,12 @@
         $uuid .= substr($str,20,12);
         return $uuid;
     }
-    
     if (!isset($_COOKIE["uuid"])) {
         $uuid=create_uuid();
         setcookie("uuid", $uuid , time()+368400000);
     }else{
         $uuid=$_COOKIE["uuid"];
     }
-    
     if (function_exists("fastcgi_finish_request")) {
         fastcgi_finish_request();
     }
