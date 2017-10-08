@@ -3,23 +3,18 @@
     $check_referer_domain=false;
     $domain='example.com';  //If you open the domain check set your domain here
     
-    if (!isset($_SERVER['HTTP_REFERER']) || !isset($_SERVER['HTTP_USER_AGENT'])){
+    if (empty($_SERVER['HTTP_REFERER']) || empty($_SERVER['HTTP_USER_AGENT'])){
         echo 'error';
         die();
     }
-    $referer=$_SERVER['HTTP_REFERER'];
-    if (!empty($referer)){
-        if ($check_referer_domain){
-            $info = parse_url($referer);
-            $local = isset($info['host']) ? $info['host'] : '';
-            if ($local!=$domain){
-                echo 'error';
-                die();
-            }
+    
+    if ($check_referer_domain){
+        $info = parse_url($_SERVER['HTTP_REFERER']);
+        $local = isset($info['host']) ? $info['host'] : '';
+        if ($local!=$domain){
+            echo 'error';
+            die();
         }
-    }else{
-        echo 'error';
-        die();
     }
     
     function create_uuid(){
