@@ -10,7 +10,7 @@ Also,it can hide your tid of google analytics.
 
 # How to use
 
-Put the main.js in all your pages.
+Load the main.js in all your pages.
 
 Get your tid and set in analytics.php and put the analytics.php in the root directory of your website.
 
